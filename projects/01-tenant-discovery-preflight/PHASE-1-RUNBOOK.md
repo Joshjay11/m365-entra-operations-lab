@@ -1,6 +1,6 @@
 # Phase 1 Runbook: Entra Aggregate Baseline
 
-**Evidence state:** Implementation is design-only until it is executed and validated in Jason's lab tenant.
+**Evidence state:** Lab execution and offline validation passed; administrator-portal cross-check pending.
 
 ## Purpose
 

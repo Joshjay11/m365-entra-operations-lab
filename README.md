@@ -10,7 +10,7 @@ This repository connects hands-on lab work to the work expected of a Microsoft 3
 
 Design and build a read-only assessment that inventories the major identity and Microsoft 365 conditions an engineer should understand before taking ownership of a tenant or planning a migration.
 
-**Current status:** The Phase 1 Entra aggregate collector, validator, runbook, schema, and synthetic report are implemented. PowerShell runtime validation, lab execution, and administrator-portal cross-check are pending.
+**Current status:** The Phase 1 Entra aggregate collector was executed in a lab tenant and all five report sections completed. The offline structure, arithmetic, and sanitization validator passed, and the Graph session disconnected. Administrator-portal cross-check is pending; tenant-specific counts remain private.
 
 The first release will produce an aggregate, redacted report covering:
 

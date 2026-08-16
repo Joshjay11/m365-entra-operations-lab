@@ -1,8 +1,8 @@
 # Phase 1 Validation Record
 
-**Current evidence state:** Design-only
+**Current evidence state:** Lab-executed; administrator-portal cross-check pending
 
-**Lab execution status:** Not run
+**Lab execution status:** Collector and offline validator passed on Windows PowerShell
 
 This record separates checks completed against the repository artifacts from checks that require Jason's Microsoft 365 lab tenant.
 
@@ -16,10 +16,10 @@ This record separates checks completed against the repository artifacts from che
 | Synthetic arithmetic reconciles | Pass | Identity, group, license, and privileged-access relationships checked |
 | Relative Markdown links resolve | Pass | Repository-local documentation links checked |
 | PowerShell delimiter and quote balance | Pass | Static source scan completed |
-| PowerShell runtime parse | Not run | PowerShell was not available in the artifact-build environment |
-| Microsoft Graph execution | Not run | Requires interactive access to Jason's lab tenant |
+| PowerShell runtime execution | Pass | Collector and validator executed with Windows PowerShell 5.1.26100.9168 |
+| Microsoft Graph execution | Pass | Stable Microsoft.Graph 2.39.0 collector completed with all five report sections complete |
 
-The artifact checks do not prove that the Microsoft Graph commands execute successfully in the lab. Runtime and tenant evidence remain pending.
+Automated lab execution is verified. Administrator-portal comparisons remain pending, and no tenant-specific counts or identifiers are published.
 
 ## Runtime issue log
 
@@ -27,21 +27,19 @@ The artifact checks do not prove that the Microsoft Graph commands execute succe
 | --- | --- | --- | --- | --- |
 | 2026-08-16 | Windows PowerShell | The validator resolved a relative report path against the process start directory instead of PowerShell's current location. A later `ConvertFrom-Json -Depth` call would also have required PowerShell 7. | Resolve relative input and output paths against `Get-Location`, and use the Windows PowerShell-compatible `ConvertFrom-Json` form. | Pass: synthetic report validated on Windows PowerShell |
 | 2026-08-16 | Microsoft Graph lab collection | A security-enabled Microsoft 365 group was counted in both the security and Microsoft 365 primary categories, so the report failed group-total reconciliation. | Treat `Unified` as the Microsoft 365 primary category first, and count only non-`Unified` security-enabled groups as security groups. | Pass: the regenerated report reconciled and passed the offline validator |
-| 2026-08-16 | Microsoft Graph lab collection | The organization call succeeded, but the returned `verifiedDomain` objects do not define `IsVerified`; strict property access made the organization section unavailable. | Count the non-null objects already returned by the organization's `verifiedDomains` collection, and use only its documented `IsDefault` and `IsInitial` properties. | Pending |
+| 2026-08-16 | Microsoft Graph lab collection | The organization call succeeded, but the returned `verifiedDomain` objects do not define `IsVerified`; strict property access made the organization section unavailable. | Count the non-null objects already returned by the organization's `verifiedDomains` collection, and use only its documented `IsDefault` and `IsInitial` properties. | Pass: organization collection completed and the regenerated report passed the offline validator |
 
 ## Lab execution record
 
-Complete this section after following [`PHASE-1-RUNBOOK.md`](PHASE-1-RUNBOOK.md).
-
 | Item | Result |
 | --- | --- |
-| Execution date in UTC | Pending |
-| PowerShell version | Pending |
-| Microsoft.Graph version | Pending |
-| Stable Graph v1.0 profile used | Pending |
-| Collector completed | Pending |
-| Offline report validator passed | Pending |
-| Graph session disconnected | Pending |
+| Execution date in UTC | 2026-08-16 |
+| PowerShell version | Windows PowerShell 5.1.26100.9168 |
+| Microsoft.Graph version | 2.39.0 |
+| Stable Graph v1.0 profile used | Pass |
+| Collector completed | Pass |
+| Offline report validator passed | Pass |
+| Graph session disconnected | Pass |
 
 Do not record the tenant ID, tenant domain, signed-in account, user names, object IDs, or raw error text in this public file.
 
@@ -49,12 +47,12 @@ Do not record the tenant ID, tenant domain, signed-in account, user names, objec
 
 | Section | Status | Notes |
 | --- | --- | --- |
-| Organization and verified domains | Pending | Counts only |
-| Users, guests, and synchronization | Pending | Counts only |
-| Groups and dynamic membership | Pending | Counts only |
-| Licensing | Pending | Aggregate units only |
-| Active privileged assignments | Pending | Counts only |
-| Eligible privileged assignments | Pending | Permission and PIM dependent |
+| Organization and verified domains | Complete | Counts only; values not published |
+| Users, guests, and synchronization | Complete | Counts only; values not published |
+| Groups and dynamic membership | Complete | Counts only; values not published |
+| Licensing | Complete | Aggregate units only; values not published |
+| Active privileged assignments | Complete | Counts only; values not published |
+| Eligible privileged assignments | Complete | Counts only; values not published |
 
 ## Portal cross-check
 
@@ -69,10 +67,8 @@ Do not record the tenant ID, tenant domain, signed-in account, user names, objec
 
 ## Completion rule
 
-Phase 1 can move from design-only to lab evidence only after:
+Phase 1 is now lab-executed evidence. It can be marked fully cross-checked only after:
 
-1. The collector runs against the lab tenant.
-2. The generated report passes the PowerShell validator.
-3. Aggregate values are compared with the relevant administrator portals.
-4. Mismatches and unavailable sections are explained.
-5. The report is reviewed for identifiers before any sanitized excerpt is published.
+1. Aggregate values are compared with the relevant administrator portals.
+2. Mismatches are explained or resolved.
+3. The real report remains private and any published excerpt is deliberately sanitized.

@@ -1,6 +1,6 @@
 # Project 01: Tenant Discovery and Migration Preflight
 
-**Status:** Phase 1 implementation drafted and artifact validation complete. PowerShell runtime validation, lab execution, and portal cross-check are next.
+**Status:** Phase 1 lab execution and offline validation complete. Administrator-portal cross-check is next.
 
 ## Scenario
 
@@ -33,7 +33,7 @@ The first implementation uses stable Microsoft Graph v1.0 PowerShell cmdlets and
 | Artifact | Purpose |
 | --- | --- |
 | [`PHASE-1-RUNBOOK.md`](PHASE-1-RUNBOOK.md) | Prerequisites, permissions, execution, cross-check, and cleanup |
-| [`PHASE-1-VALIDATION.md`](PHASE-1-VALIDATION.md) | Honest separation of completed artifact checks from pending lab evidence |
+| [`PHASE-1-VALIDATION.md`](PHASE-1-VALIDATION.md) | Completed automated lab evidence, runtime corrections, and pending portal comparisons |
 | [`Get-TenantDiscoveryPhase1.ps1`](scripts/Get-TenantDiscoveryPhase1.ps1) | Read-only aggregate collector with identifier checks |
 | [`Test-TenantDiscoveryPhase1Report.ps1`](scripts/Test-TenantDiscoveryPhase1Report.ps1) | Offline structure, arithmetic, and sanitization validator |
 | [`tenant-baseline.schema.json`](schema/tenant-baseline.schema.json) | Published Phase 1 report contract |
@@ -46,13 +46,13 @@ Delegated scopes:
 - `Organization.Read.All`
 - `RoleManagement.Read.Directory`
 
-The scripts remain design-only evidence until Jason runs them in his lab tenant, validates the generated report, and records the actual result.
+The scripts are lab-executed evidence from Jason's own tenant. All five report sections completed, the offline validator passed, and the Graph session disconnected. No tenant-specific counts or identifiers are published. Administrator-portal comparison remains pending.
 
 ## Planned implementation phases
 
 ### Phase 1: Entra aggregate baseline
 
-**Implementation status:** Script, validator, runbook, schema, and synthetic example are available. Lab execution is pending.
+**Implementation status:** Script, validator, runbook, schema, and synthetic example are available. Lab execution and offline validation passed; administrator-portal comparison is pending.
 
 - organization and verified-domain summary
 - user and guest counts

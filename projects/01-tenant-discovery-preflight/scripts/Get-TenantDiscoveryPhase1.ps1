@@ -379,7 +379,13 @@ try {
     $json = $report | ConvertTo-Json -Depth 10
     Assert-SanitizedReport -Json $json
 
-    $fullOutputPath = [System.IO.Path]::GetFullPath($OutputPath)
+    $outputPathCandidate = if ([System.IO.Path]::IsPathRooted($OutputPath)) {
+        $OutputPath
+    }
+    else {
+        Join-Path -Path (Get-Location).Path -ChildPath $OutputPath
+    }
+    $fullOutputPath = [System.IO.Path]::GetFullPath($outputPathCandidate)
     $sampleDirectory = [System.IO.Path]::GetFullPath(
         (Join-Path $PSScriptRoot "../samples")
     )

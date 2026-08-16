@@ -33,7 +33,7 @@ These delegated scopes require administrator consent in most tenants. They allow
 
 ## Prerequisites
 
-1. Use PowerShell 7 if available.
+1. Use PowerShell 7 if available. Windows PowerShell 5.1 is also supported by these Phase 1 scripts.
 2. Confirm the execution policy:
 
    ```powershell

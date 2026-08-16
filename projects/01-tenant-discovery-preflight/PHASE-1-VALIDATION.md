@@ -21,6 +21,12 @@ This record separates checks completed against the repository artifacts from che
 
 The artifact checks do not prove that the Microsoft Graph commands execute successfully in the lab. Runtime and tenant evidence remain pending.
 
+## Runtime issue log
+
+| Date | Environment | Observation | Correction | Retest |
+| --- | --- | --- | --- | --- |
+| 2026-08-16 | Windows PowerShell | The validator resolved a relative report path against the process start directory instead of PowerShell's current location. A later `ConvertFrom-Json -Depth` call would also have required PowerShell 7. | Resolve relative input and output paths against `Get-Location`, and use the Windows PowerShell-compatible `ConvertFrom-Json` form. | Pending |
+
 ## Lab execution record
 
 Complete this section after following [`PHASE-1-RUNBOOK.md`](PHASE-1-RUNBOOK.md).

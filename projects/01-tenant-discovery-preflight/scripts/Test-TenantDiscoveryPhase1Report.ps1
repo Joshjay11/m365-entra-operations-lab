@@ -58,11 +58,17 @@ function Assert-NullableNonNegativeInteger {
     Assert-Condition -Condition ($Value -ge 0) -Message "$FieldName cannot be negative."
 }
 
-$fullReportPath = [System.IO.Path]::GetFullPath($ReportPath)
+$reportPathCandidate = if ([System.IO.Path]::IsPathRooted($ReportPath)) {
+    $ReportPath
+}
+else {
+    Join-Path -Path (Get-Location).Path -ChildPath $ReportPath
+}
+$fullReportPath = [System.IO.Path]::GetFullPath($reportPathCandidate)
 Assert-Condition -Condition (Test-Path -LiteralPath $fullReportPath -PathType Leaf) -Message "Report file not found."
 
 $rawJson = Get-Content -LiteralPath $fullReportPath -Raw -Encoding utf8
-$report = $rawJson | ConvertFrom-Json -Depth 20
+$report = $rawJson | ConvertFrom-Json
 
 Assert-PropertySet -InputObject $report -SectionName "root" -ExpectedProperties @(
     "metadata",

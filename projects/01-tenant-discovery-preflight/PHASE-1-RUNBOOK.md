@@ -131,6 +131,7 @@ For every mismatch, record:
 ## Expected limitations
 
 - Eligible role assignments may be unavailable when the tenant lacks PIM capability or the signed-in account cannot read the schedule.
+- Primary group categories are mutually exclusive: Microsoft 365 groups contain `Unified`; security groups are security-enabled groups without `Unified`; and all remaining groups are counted as other groups. A security-enabled Microsoft 365 group is counted only as a Microsoft 365 group.
 - Dynamic groups can also be security or Microsoft 365 groups. `dynamicGroups` is an overlapping characteristic, not an additional group category.
 - License availability can be negative when consumed units exceed enabled units.
 - Counts may differ briefly from admin-center views because Graph and portal views can use different filters or update timing.

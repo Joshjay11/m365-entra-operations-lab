@@ -259,7 +259,9 @@ try {
         $report.groups = [ordered]@{
             status             = "complete"
             totalGroups        = $groups.Count
-            securityGroups     = Get-Count $groups { $_.SecurityEnabled -eq $true }
+            securityGroups     = Get-Count $groups {
+                $_.SecurityEnabled -eq $true -and $_.GroupTypes -notcontains "Unified"
+            }
             microsoft365Groups = Get-Count $groups { $_.GroupTypes -contains "Unified" }
             dynamicGroups      = Get-Count $groups { $_.GroupTypes -contains "DynamicMembership" }
             otherGroups        = Get-Count $groups {

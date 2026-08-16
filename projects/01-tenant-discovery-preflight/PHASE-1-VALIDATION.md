@@ -25,7 +25,8 @@ The artifact checks do not prove that the Microsoft Graph commands execute succe
 
 | Date | Environment | Observation | Correction | Retest |
 | --- | --- | --- | --- | --- |
-| 2026-08-16 | Windows PowerShell | The validator resolved a relative report path against the process start directory instead of PowerShell's current location. A later `ConvertFrom-Json -Depth` call would also have required PowerShell 7. | Resolve relative input and output paths against `Get-Location`, and use the Windows PowerShell-compatible `ConvertFrom-Json` form. | Pending |
+| 2026-08-16 | Windows PowerShell | The validator resolved a relative report path against the process start directory instead of PowerShell's current location. A later `ConvertFrom-Json -Depth` call would also have required PowerShell 7. | Resolve relative input and output paths against `Get-Location`, and use the Windows PowerShell-compatible `ConvertFrom-Json` form. | Pass: synthetic report validated on Windows PowerShell |
+| 2026-08-16 | Microsoft Graph lab collection | A security-enabled Microsoft 365 group was counted in both the security and Microsoft 365 primary categories, so the report failed group-total reconciliation. | Treat `Unified` as the Microsoft 365 primary category first, and count only non-`Unified` security-enabled groups as security groups. | Pending |
 
 ## Lab execution record
 

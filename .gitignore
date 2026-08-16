@@ -1,0 +1,39 @@
+# Generated assessment output
+output/
+reports/
+exports/
+raw/
+transcripts/
+
+# Tenant-specific configuration
+.env
+.env.*
+local.settings.json
+tenant.config.json
+*.local.json
+
+# Credentials and certificates
+*.pfx
+*.p12
+*.pem
+*.key
+*.cer
+*.crt
+*.secret
+*.token
+
+# PowerShell and editor artifacts
+*.clixml
+*.log
+.vscode/
+.idea/
+
+# Operating-system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Sanitized examples are intentionally tracked
+!projects/**/samples/
+!projects/**/samples/**
+

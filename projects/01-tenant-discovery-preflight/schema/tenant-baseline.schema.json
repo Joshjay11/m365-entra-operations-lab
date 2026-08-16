@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://m365fixer.com/schemas/tenant-baseline.schema.json",
+  "title": "Sanitized Microsoft 365 and Entra Tenant Baseline",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "metadata",
+    "identity",
+    "groups",
+    "licensing",
+    "privilegedAccess",
+    "conditionalAccess",
+    "devices",
+    "limitations"
+  ],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "generatedAtUtc", "evidenceType"],
+      "properties": {
+        "schemaVersion": { "const": "0.1.0" },
+        "generatedAtUtc": { "type": "string", "format": "date-time" },
+        "evidenceType": { "enum": ["synthetic", "sanitized-lab"] }
+      }
+    },
+    "identity": {
+      "$ref": "#/$defs/identitySummary"
+    },
+    "groups": {
+      "$ref": "#/$defs/groupSummary"
+    },
+    "licensing": {
+      "$ref": "#/$defs/licenseSummary"
+    },
+    "privilegedAccess": {
+      "$ref": "#/$defs/privilegedAccessSummary"
+    },
+    "conditionalAccess": {
+      "$ref": "#/$defs/conditionalAccessSummary"
+    },
+    "devices": {
+      "$ref": "#/$defs/deviceSummary"
+    },
+    "limitations": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "nonNegativeInteger": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "identitySummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["totalUsers", "enabledUsers", "disabledUsers", "memberUsers", "guestUsers", "syncedUsers", "cloudOnlyUsers"],
+      "properties": {
+        "totalUsers": { "$ref": "#/$defs/nonNegativeInteger" },
+        "enabledUsers": { "$ref": "#/$defs/nonNegativeInteger" },
+        "disabledUsers": { "$ref": "#/$defs/nonNegativeInteger" },
+        "memberUsers": { "$ref": "#/$defs/nonNegativeInteger" },
+        "guestUsers": { "$ref": "#/$defs/nonNegativeInteger" },
+        "syncedUsers": { "$ref": "#/$defs/nonNegativeInteger" },
+        "cloudOnlyUsers": { "$ref": "#/$defs/nonNegativeInteger" }
+      }
+    },
+    "groupSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["totalGroups", "securityGroups", "microsoft365Groups", "dynamicGroups"],
+      "properties": {
+        "totalGroups": { "$ref": "#/$defs/nonNegativeInteger" },
+        "securityGroups": { "$ref": "#/$defs/nonNegativeInteger" },
+        "microsoft365Groups": { "$ref": "#/$defs/nonNegativeInteger" },
+        "dynamicGroups": { "$ref": "#/$defs/nonNegativeInteger" }
+      }
+    },
+    "licenseSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["subscribedSkus", "consumedUnits", "availableUnits"],
+      "properties": {
+        "subscribedSkus": { "$ref": "#/$defs/nonNegativeInteger" },
+        "consumedUnits": { "$ref": "#/$defs/nonNegativeInteger" },
+        "availableUnits": { "$ref": "#/$defs/nonNegativeInteger" }
+      }
+    },
+    "privilegedAccessSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["activeAssignments", "eligibleAssignments", "uniquePrivilegedPrincipals"],
+      "properties": {
+        "activeAssignments": { "$ref": "#/$defs/nonNegativeInteger" },
+        "eligibleAssignments": { "$ref": "#/$defs/nonNegativeInteger" },
+        "uniquePrivilegedPrincipals": { "$ref": "#/$defs/nonNegativeInteger" }
+      }
+    },
+    "conditionalAccessSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["totalPolicies", "enabledPolicies", "reportOnlyPolicies", "disabledPolicies"],
+      "properties": {
+        "totalPolicies": { "$ref": "#/$defs/nonNegativeInteger" },
+        "enabledPolicies": { "$ref": "#/$defs/nonNegativeInteger" },
+        "reportOnlyPolicies": { "$ref": "#/$defs/nonNegativeInteger" },
+        "disabledPolicies": { "$ref": "#/$defs/nonNegativeInteger" }
+      }
+    },
+    "deviceSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["registered", "entraJoined", "hybridJoined", "managed", "unmanaged"],
+      "properties": {
+        "registered": { "$ref": "#/$defs/nonNegativeInteger" },
+        "entraJoined": { "$ref": "#/$defs/nonNegativeInteger" },
+        "hybridJoined": { "$ref": "#/$defs/nonNegativeInteger" },
+        "managed": { "$ref": "#/$defs/nonNegativeInteger" },
+        "unmanaged": { "$ref": "#/$defs/nonNegativeInteger" }
+      }
+    }
+  }
+}
+

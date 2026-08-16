@@ -1,29 +1,39 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://m365fixer.com/schemas/tenant-baseline.schema.json",
-  "title": "Sanitized Microsoft 365 and Entra Tenant Baseline",
+  "title": "Sanitized Microsoft 365 and Entra Tenant Baseline, Phase 1",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "metadata",
+    "organization",
     "identity",
     "groups",
     "licensing",
     "privilegedAccess",
-    "conditionalAccess",
-    "devices",
     "limitations"
   ],
   "properties": {
     "metadata": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["schemaVersion", "generatedAtUtc", "evidenceType"],
+      "required": [
+        "schemaVersion",
+        "generatedAtUtc",
+        "evidenceType",
+        "phase",
+        "graphApiProfile"
+      ],
       "properties": {
-        "schemaVersion": { "const": "0.1.0" },
+        "schemaVersion": { "const": "0.2.0" },
         "generatedAtUtc": { "type": "string", "format": "date-time" },
-        "evidenceType": { "enum": ["synthetic", "sanitized-lab"] }
+        "evidenceType": { "enum": ["synthetic", "sanitized-lab"] },
+        "phase": { "const": "phase-1" },
+        "graphApiProfile": { "const": "v1.0" }
       }
+    },
+    "organization": {
+      "$ref": "#/$defs/organizationSummary"
     },
     "identity": {
       "$ref": "#/$defs/identitySummary"
@@ -37,12 +47,6 @@
     "privilegedAccess": {
       "$ref": "#/$defs/privilegedAccessSummary"
     },
-    "conditionalAccess": {
-      "$ref": "#/$defs/conditionalAccessSummary"
-    },
-    "devices": {
-      "$ref": "#/$defs/deviceSummary"
-    },
     "limitations": {
       "type": "array",
       "items": { "type": "string", "minLength": 1 },
@@ -50,78 +54,248 @@
     }
   },
   "$defs": {
-    "nonNegativeInteger": {
-      "type": "integer",
+    "collectionStatus": {
+      "enum": ["complete", "partial", "unavailable"]
+    },
+    "binaryCollectionStatus": {
+      "enum": ["complete", "unavailable"]
+    },
+    "nullableNonNegativeInteger": {
+      "type": ["integer", "null"],
       "minimum": 0
+    },
+    "nullableInteger": {
+      "type": ["integer", "null"]
+    },
+    "organizationSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "organizations",
+        "verifiedDomains",
+        "defaultDomains",
+        "initialDomains"
+      ],
+      "properties": {
+        "status": { "$ref": "#/$defs/binaryCollectionStatus" },
+        "organizations": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "verifiedDomains": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "defaultDomains": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "initialDomains": { "$ref": "#/$defs/nullableNonNegativeInteger" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "complete" } } },
+          "then": {
+            "properties": {
+              "organizations": { "type": "integer", "minimum": 0 },
+              "verifiedDomains": { "type": "integer", "minimum": 0 },
+              "defaultDomains": { "type": "integer", "minimum": 0 },
+              "initialDomains": { "type": "integer", "minimum": 0 }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "status": { "const": "unavailable" } } },
+          "then": {
+            "properties": {
+              "organizations": { "type": "null" },
+              "verifiedDomains": { "type": "null" },
+              "defaultDomains": { "type": "null" },
+              "initialDomains": { "type": "null" }
+            }
+          }
+        }
+      ]
     },
     "identitySummary": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["totalUsers", "enabledUsers", "disabledUsers", "memberUsers", "guestUsers", "syncedUsers", "cloudOnlyUsers"],
+      "required": [
+        "status",
+        "totalUsers",
+        "enabledUsers",
+        "disabledUsers",
+        "unknownAccountStateUsers",
+        "memberUsers",
+        "guestUsers",
+        "unknownUserTypeUsers",
+        "syncedUsers",
+        "cloudOnlyUsers"
+      ],
       "properties": {
-        "totalUsers": { "$ref": "#/$defs/nonNegativeInteger" },
-        "enabledUsers": { "$ref": "#/$defs/nonNegativeInteger" },
-        "disabledUsers": { "$ref": "#/$defs/nonNegativeInteger" },
-        "memberUsers": { "$ref": "#/$defs/nonNegativeInteger" },
-        "guestUsers": { "$ref": "#/$defs/nonNegativeInteger" },
-        "syncedUsers": { "$ref": "#/$defs/nonNegativeInteger" },
-        "cloudOnlyUsers": { "$ref": "#/$defs/nonNegativeInteger" }
-      }
+        "status": { "$ref": "#/$defs/binaryCollectionStatus" },
+        "totalUsers": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "enabledUsers": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "disabledUsers": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "unknownAccountStateUsers": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "memberUsers": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "guestUsers": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "unknownUserTypeUsers": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "syncedUsers": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "cloudOnlyUsers": { "$ref": "#/$defs/nullableNonNegativeInteger" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "complete" } } },
+          "then": {
+            "properties": {
+              "totalUsers": { "type": "integer", "minimum": 0 },
+              "enabledUsers": { "type": "integer", "minimum": 0 },
+              "disabledUsers": { "type": "integer", "minimum": 0 },
+              "unknownAccountStateUsers": { "type": "integer", "minimum": 0 },
+              "memberUsers": { "type": "integer", "minimum": 0 },
+              "guestUsers": { "type": "integer", "minimum": 0 },
+              "unknownUserTypeUsers": { "type": "integer", "minimum": 0 },
+              "syncedUsers": { "type": "integer", "minimum": 0 },
+              "cloudOnlyUsers": { "type": "integer", "minimum": 0 }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "status": { "const": "unavailable" } } },
+          "then": {
+            "properties": {
+              "totalUsers": { "type": "null" },
+              "enabledUsers": { "type": "null" },
+              "disabledUsers": { "type": "null" },
+              "unknownAccountStateUsers": { "type": "null" },
+              "memberUsers": { "type": "null" },
+              "guestUsers": { "type": "null" },
+              "unknownUserTypeUsers": { "type": "null" },
+              "syncedUsers": { "type": "null" },
+              "cloudOnlyUsers": { "type": "null" }
+            }
+          }
+        }
+      ]
     },
     "groupSummary": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["totalGroups", "securityGroups", "microsoft365Groups", "dynamicGroups"],
+      "required": [
+        "status",
+        "totalGroups",
+        "securityGroups",
+        "microsoft365Groups",
+        "dynamicGroups",
+        "otherGroups"
+      ],
       "properties": {
-        "totalGroups": { "$ref": "#/$defs/nonNegativeInteger" },
-        "securityGroups": { "$ref": "#/$defs/nonNegativeInteger" },
-        "microsoft365Groups": { "$ref": "#/$defs/nonNegativeInteger" },
-        "dynamicGroups": { "$ref": "#/$defs/nonNegativeInteger" }
-      }
+        "status": { "$ref": "#/$defs/binaryCollectionStatus" },
+        "totalGroups": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "securityGroups": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "microsoft365Groups": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "dynamicGroups": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "otherGroups": { "$ref": "#/$defs/nullableNonNegativeInteger" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "complete" } } },
+          "then": {
+            "properties": {
+              "totalGroups": { "type": "integer", "minimum": 0 },
+              "securityGroups": { "type": "integer", "minimum": 0 },
+              "microsoft365Groups": { "type": "integer", "minimum": 0 },
+              "dynamicGroups": { "type": "integer", "minimum": 0 },
+              "otherGroups": { "type": "integer", "minimum": 0 }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "status": { "const": "unavailable" } } },
+          "then": {
+            "properties": {
+              "totalGroups": { "type": "null" },
+              "securityGroups": { "type": "null" },
+              "microsoft365Groups": { "type": "null" },
+              "dynamicGroups": { "type": "null" },
+              "otherGroups": { "type": "null" }
+            }
+          }
+        }
+      ]
     },
     "licenseSummary": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["subscribedSkus", "consumedUnits", "availableUnits"],
+      "required": [
+        "status",
+        "subscribedSkus",
+        "enabledUnits",
+        "consumedUnits",
+        "availableUnits"
+      ],
       "properties": {
-        "subscribedSkus": { "$ref": "#/$defs/nonNegativeInteger" },
-        "consumedUnits": { "$ref": "#/$defs/nonNegativeInteger" },
-        "availableUnits": { "$ref": "#/$defs/nonNegativeInteger" }
-      }
+        "status": { "$ref": "#/$defs/binaryCollectionStatus" },
+        "subscribedSkus": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "enabledUnits": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "consumedUnits": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "availableUnits": { "$ref": "#/$defs/nullableInteger" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "complete" } } },
+          "then": {
+            "properties": {
+              "subscribedSkus": { "type": "integer", "minimum": 0 },
+              "enabledUnits": { "type": "integer", "minimum": 0 },
+              "consumedUnits": { "type": "integer", "minimum": 0 },
+              "availableUnits": { "type": "integer" }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "status": { "const": "unavailable" } } },
+          "then": {
+            "properties": {
+              "subscribedSkus": { "type": "null" },
+              "enabledUnits": { "type": "null" },
+              "consumedUnits": { "type": "null" },
+              "availableUnits": { "type": "null" }
+            }
+          }
+        }
+      ]
     },
     "privilegedAccessSummary": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["activeAssignments", "eligibleAssignments", "uniquePrivilegedPrincipals"],
+      "required": [
+        "status",
+        "activeAssignments",
+        "eligibleAssignments",
+        "uniquePrivilegedPrincipals"
+      ],
       "properties": {
-        "activeAssignments": { "$ref": "#/$defs/nonNegativeInteger" },
-        "eligibleAssignments": { "$ref": "#/$defs/nonNegativeInteger" },
-        "uniquePrivilegedPrincipals": { "$ref": "#/$defs/nonNegativeInteger" }
-      }
-    },
-    "conditionalAccessSummary": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["totalPolicies", "enabledPolicies", "reportOnlyPolicies", "disabledPolicies"],
-      "properties": {
-        "totalPolicies": { "$ref": "#/$defs/nonNegativeInteger" },
-        "enabledPolicies": { "$ref": "#/$defs/nonNegativeInteger" },
-        "reportOnlyPolicies": { "$ref": "#/$defs/nonNegativeInteger" },
-        "disabledPolicies": { "$ref": "#/$defs/nonNegativeInteger" }
-      }
-    },
-    "deviceSummary": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["registered", "entraJoined", "hybridJoined", "managed", "unmanaged"],
-      "properties": {
-        "registered": { "$ref": "#/$defs/nonNegativeInteger" },
-        "entraJoined": { "$ref": "#/$defs/nonNegativeInteger" },
-        "hybridJoined": { "$ref": "#/$defs/nonNegativeInteger" },
-        "managed": { "$ref": "#/$defs/nonNegativeInteger" },
-        "unmanaged": { "$ref": "#/$defs/nonNegativeInteger" }
-      }
+        "status": { "$ref": "#/$defs/collectionStatus" },
+        "activeAssignments": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "eligibleAssignments": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "uniquePrivilegedPrincipals": { "$ref": "#/$defs/nullableNonNegativeInteger" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "complete" } } },
+          "then": {
+            "properties": {
+              "activeAssignments": { "type": "integer", "minimum": 0 },
+              "eligibleAssignments": { "type": "integer", "minimum": 0 },
+              "uniquePrivilegedPrincipals": { "type": "integer", "minimum": 0 }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "status": { "const": "unavailable" } } },
+          "then": {
+            "properties": {
+              "activeAssignments": { "type": "null" },
+              "eligibleAssignments": { "type": "null" },
+              "uniquePrivilegedPrincipals": { "type": "null" }
+            }
+          }
+        }
+      ]
     }
   }
 }
-

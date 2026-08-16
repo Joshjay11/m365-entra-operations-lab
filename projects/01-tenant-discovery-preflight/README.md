@@ -1,6 +1,6 @@
 # Project 01: Tenant Discovery and Migration Preflight
 
-**Status:** Design complete. Implementation and lab validation are next.
+**Status:** Phase 1 implementation drafted and artifact validation complete. PowerShell runtime validation, lab execution, and portal cross-check are next.
 
 ## Scenario
 
@@ -26,9 +26,33 @@ The initial implementation is read-only. It must not create, update, disable, de
 
 Committed sample output is synthetic. Real output belongs in ignored local directories and must be reviewed before any excerpt is published.
 
+## Phase 1 implementation
+
+The first implementation uses stable Microsoft Graph v1.0 PowerShell cmdlets and produces counts plus collection status only.
+
+| Artifact | Purpose |
+| --- | --- |
+| [`PHASE-1-RUNBOOK.md`](PHASE-1-RUNBOOK.md) | Prerequisites, permissions, execution, cross-check, and cleanup |
+| [`PHASE-1-VALIDATION.md`](PHASE-1-VALIDATION.md) | Honest separation of completed artifact checks from pending lab evidence |
+| [`Get-TenantDiscoveryPhase1.ps1`](scripts/Get-TenantDiscoveryPhase1.ps1) | Read-only aggregate collector with identifier checks |
+| [`Test-TenantDiscoveryPhase1Report.ps1`](scripts/Test-TenantDiscoveryPhase1Report.ps1) | Offline structure, arithmetic, and sanitization validator |
+| [`tenant-baseline.schema.json`](schema/tenant-baseline.schema.json) | Published Phase 1 report contract |
+| [`tenant-baseline.synthetic.json`](samples/tenant-baseline.synthetic.json) | Fictional example that conforms to schema version 0.2.0 |
+
+Delegated scopes:
+
+- `User.Read.All`
+- `Group.Read.All`
+- `Organization.Read.All`
+- `RoleManagement.Read.Directory`
+
+The scripts remain design-only evidence until Jason runs them in his lab tenant, validates the generated report, and records the actual result.
+
 ## Planned implementation phases
 
 ### Phase 1: Entra aggregate baseline
+
+**Implementation status:** Script, validator, runbook, schema, and synthetic example are available. Lab execution is pending.
 
 - organization and verified-domain summary
 - user and guest counts
@@ -60,7 +84,9 @@ Committed sample output is synthetic. Real output belongs in ignored local direc
 
 ## Report design
 
-The aggregate report will conform to [`tenant-baseline.schema.json`](schema/tenant-baseline.schema.json). A deliberately fictional example is provided at [`tenant-baseline.synthetic.json`](samples/tenant-baseline.synthetic.json).
+The Phase 1 aggregate report conforms to [`tenant-baseline.schema.json`](schema/tenant-baseline.schema.json). A deliberately fictional example is provided at [`tenant-baseline.synthetic.json`](samples/tenant-baseline.synthetic.json).
+
+Schema version 0.2.0 uses `null` plus a collection status when a section cannot be read. It does not use zero to mean "not collected."
 
 ## Validation plan
 
@@ -75,4 +101,3 @@ The aggregate report will conform to [`tenant-baseline.schema.json`](schema/tena
 ## Walkthrough outcome
 
 At completion, the operator should be able to explain what each discovery check reveals, which Microsoft control plane supplies the data, what permission is required, and why the result matters before a migration or operational handoff.
-

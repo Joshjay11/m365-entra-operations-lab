@@ -1,49 +1,53 @@
 {
   "metadata": {
-    "schemaVersion": "0.1.0",
+    "schemaVersion": "0.2.0",
     "generatedAtUtc": "2026-08-16T16:00:00Z",
-    "evidenceType": "synthetic"
+    "evidenceType": "synthetic",
+    "phase": "phase-1",
+    "graphApiProfile": "v1.0"
+  },
+  "organization": {
+    "status": "complete",
+    "organizations": 1,
+    "verifiedDomains": 3,
+    "defaultDomains": 1,
+    "initialDomains": 1
   },
   "identity": {
+    "status": "complete",
     "totalUsers": 128,
     "enabledUsers": 119,
     "disabledUsers": 9,
+    "unknownAccountStateUsers": 0,
     "memberUsers": 112,
     "guestUsers": 16,
+    "unknownUserTypeUsers": 0,
     "syncedUsers": 72,
     "cloudOnlyUsers": 56
   },
   "groups": {
+    "status": "complete",
     "totalGroups": 64,
     "securityGroups": 31,
     "microsoft365Groups": 25,
-    "dynamicGroups": 8
+    "dynamicGroups": 8,
+    "otherGroups": 8
   },
   "licensing": {
+    "status": "complete",
     "subscribedSkus": 4,
+    "enabledUnits": 140,
     "consumedUnits": 121,
     "availableUnits": 19
   },
   "privilegedAccess": {
+    "status": "complete",
     "activeAssignments": 7,
     "eligibleAssignments": 11,
     "uniquePrivilegedPrincipals": 9
   },
-  "conditionalAccess": {
-    "totalPolicies": 12,
-    "enabledPolicies": 7,
-    "reportOnlyPolicies": 3,
-    "disabledPolicies": 2
-  },
-  "devices": {
-    "registered": 54,
-    "entraJoined": 43,
-    "hybridJoined": 31,
-    "managed": 78,
-    "unmanaged": 50
-  },
   "limitations": [
     "All values are fictional and exist only to demonstrate the report structure.",
-    "Workload-level Exchange, Teams, SharePoint, OneDrive, and Intune findings are not included in schema version 0.1.0."
+    "Conditional Access, device, and Microsoft 365 workload posture are outside Phase 1 and were not collected."
   ]
 }

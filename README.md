@@ -10,6 +10,8 @@ This repository connects hands-on lab work to the work expected of a Microsoft 3
 
 Design and build a read-only assessment that inventories the major identity and Microsoft 365 conditions an engineer should understand before taking ownership of a tenant or planning a migration.
 
+**Current status:** The Phase 1 Entra aggregate collector, validator, runbook, schema, and synthetic report are implemented. PowerShell runtime validation, lab execution, and administrator-portal cross-check are pending.
+
 The first release will produce an aggregate, redacted report covering:
 
 - tenant and verified-domain readiness
@@ -78,4 +80,3 @@ Jason Wiggins is targeting remote U.S. Microsoft 365, Modern Workplace, Entra ID
 - [Microsoft SC-300 study guide](https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/sc-300)
 - [Microsoft Graph PowerShell documentation](https://learn.microsoft.com/en-us/powershell/microsoftgraph/overview)
 - [Microsoft 365 documentation](https://learn.microsoft.com/en-us/microsoft-365/)
-

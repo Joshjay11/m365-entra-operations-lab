@@ -205,7 +205,7 @@ try {
         $verifiedDomains = @(
             $organizations |
                 ForEach-Object { @($_.VerifiedDomains) } |
-                Where-Object { $null -ne $_ -and $_.IsVerified -eq $true }
+                Where-Object { $null -ne $_ }
         )
 
         $report.organization = [ordered]@{
@@ -217,7 +217,7 @@ try {
         }
     }
     catch {
-        Add-Limitation "Organization and verified-domain counts were not collected. Confirm User.Read.All access and retry."
+        Add-Limitation "Organization and verified-domain counts were not collected. Confirm organization read access and retry."
     }
 
     try {

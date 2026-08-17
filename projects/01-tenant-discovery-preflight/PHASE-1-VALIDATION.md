@@ -1,10 +1,10 @@
 # Phase 1 Validation Record
 
-**Current evidence state:** Lab-executed; administrator-portal cross-check pending
+**Current evidence state:** Lab-executed and administrator-portal cross-checked
 
-**Lab execution status:** Collector and offline validator passed on Windows PowerShell
+**Lab execution status:** Collector and offline validator passed on Windows PowerShell; all portal comparisons passed
 
-This record separates checks completed against the repository artifacts from checks that require Jason's Microsoft 365 lab tenant.
+This record separates checks completed against the repository artifacts from completed comparisons against Jason's Microsoft 365 lab tenant.
 
 ## Artifact checks
 
@@ -19,7 +19,7 @@ This record separates checks completed against the repository artifacts from che
 | PowerShell runtime execution | Pass | Collector and validator executed with Windows PowerShell 5.1.26100.9168 |
 | Microsoft Graph execution | Pass | Stable Microsoft.Graph 2.39.0 collector completed with all five report sections complete |
 
-Automated lab execution is verified. Administrator-portal comparisons remain pending, and no tenant-specific counts or identifiers are published.
+Automated lab execution and all six administrator-portal comparisons are verified. No tenant-specific counts or identifiers are published.
 
 ## Runtime issue log
 
@@ -56,19 +56,19 @@ Do not record the tenant ID, tenant domain, signed-in account, user names, objec
 
 ## Portal cross-check
 
-| Comparison | Result | Sanitized explanation of any mismatch |
+| Comparison | Result | Sanitized evidence |
 | --- | --- | --- |
-| Organization and custom domains | Pending | Pending |
-| Users and guests | Pending | Pending |
-| Account and synchronization state | Pending | Pending |
-| Group types | Pending | Pending |
-| License units | Pending | Pending |
-| Active and eligible role assignments | Pending | Pending |
+| Organization and custom domains | Pass | Aggregate organization and domain counts matched the administrator portal |
+| Users and guests | Pass | Aggregate user, member, and guest counts matched the administrator portal |
+| Account and synchronization state | Pass | Enabled, disabled, synchronized, and cloud-only counts matched the administrator portal |
+| Group types | Pass | Aggregate total, security, Microsoft 365, and dynamic group counts matched the administrator portal |
+| License units | Pass | Aggregate SKU, enabled, consumed, and available unit counts matched the administrator portal |
+| Active and eligible role assignments | Pass | Aggregate active, eligible, and distinct-principal counts matched the PIM portal |
 
 ## Completion rule
 
-Phase 1 is now lab-executed evidence. It can be marked fully cross-checked only after:
+Phase 1 is fully cross-checked:
 
-1. Aggregate values are compared with the relevant administrator portals.
-2. Mismatches are explained or resolved.
-3. The real report remains private and any published excerpt is deliberately sanitized.
+1. Aggregate values were compared with the relevant administrator portals.
+2. All six comparisons passed without an unexplained mismatch.
+3. The real report remains private, and the public validation record contains no tenant-specific counts or identifiers.

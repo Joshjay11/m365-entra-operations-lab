@@ -1,6 +1,6 @@
 # Project 01: Tenant Discovery and Migration Preflight
 
-**Status:** Phase 1 lab execution and offline validation complete. Administrator-portal cross-check is next.
+**Status:** Phase 1 complete and cross-checked. Phase 2 design and synthetic validation ready; lab execution pending.
 
 ## Scenario
 
@@ -16,28 +16,29 @@ The assessment should answer:
 4. How are licenses consumed and where are obvious shortages or anomalies?
 5. Which principals hold privileged roles?
 6. What is the state of Conditional Access policies?
-7. What device identity and management states are represented?
-8. Which Exchange Online and collaboration-workload conditions require deeper discovery?
-9. What cannot be concluded from the available permissions or licenses?
+7. What authentication registration and identity-risk information is available?
+8. What device identity and management states are represented?
+9. Which Exchange Online and collaboration-workload conditions require deeper discovery?
+10. What cannot be concluded from the available permissions, roles, reports, or licenses?
 
 ## Safety boundary
 
-The initial implementation is read-only. It must not create, update, disable, delete, assign, revoke, migrate, or remediate anything.
+The implementation is read-only. It must not create, update, enable, disable, delete, assign, revoke, dismiss risk, migrate, or remediate anything.
 
 Committed sample output is synthetic. Real output belongs in ignored local directories and must be reviewed before any excerpt is published.
 
 ## Phase 1 implementation
 
-The first implementation uses stable Microsoft Graph v1.0 PowerShell cmdlets and produces counts plus collection status only.
+Phase 1 uses stable Microsoft Graph v1.0 PowerShell cmdlets and produces counts plus collection status only.
 
 | Artifact | Purpose |
 | --- | --- |
 | [`PHASE-1-RUNBOOK.md`](PHASE-1-RUNBOOK.md) | Prerequisites, permissions, execution, cross-check, and cleanup |
-| [`PHASE-1-VALIDATION.md`](PHASE-1-VALIDATION.md) | Completed automated lab evidence, runtime corrections, and pending portal comparisons |
+| [`PHASE-1-VALIDATION.md`](PHASE-1-VALIDATION.md) | Completed automated and administrator-portal evidence |
 | [`Get-TenantDiscoveryPhase1.ps1`](scripts/Get-TenantDiscoveryPhase1.ps1) | Read-only aggregate collector with identifier checks |
 | [`Test-TenantDiscoveryPhase1Report.ps1`](scripts/Test-TenantDiscoveryPhase1Report.ps1) | Offline structure, arithmetic, and sanitization validator |
 | [`tenant-baseline.schema.json`](schema/tenant-baseline.schema.json) | Published Phase 1 report contract |
-| [`tenant-baseline.synthetic.json`](samples/tenant-baseline.synthetic.json) | Fictional example that conforms to schema version 0.2.0 |
+| [`tenant-baseline.synthetic.json`](samples/tenant-baseline.synthetic.json) | Fictional example conforming to schema version 0.2.0 |
 
 Delegated scopes:
 
@@ -46,13 +47,36 @@ Delegated scopes:
 - `Organization.Read.All`
 - `RoleManagement.Read.Directory`
 
-The scripts are lab-executed evidence from Jason's own tenant. All five report sections completed, the offline validator passed, and the Graph session disconnected. No tenant-specific counts or identifiers are published. Administrator-portal comparison remains pending.
+The scripts are lab-executed evidence from Jason's own tenant. All five report sections completed, the offline validator passed, the Graph session disconnected, and all administrator-portal comparisons passed. No tenant-specific counts or identifiers are published.
+
+## Phase 2 implementation
+
+Phase 2 keeps the same counts-only evidence boundary while adding access and policy posture.
+
+| Artifact | Purpose |
+| --- | --- |
+| [`PHASE-2-RUNBOOK.md`](PHASE-2-RUNBOOK.md) | Permissions, execution, validation, portal cross-check, and cleanup |
+| [`PHASE-2-REVIEW-CHECKLIST.md`](PHASE-2-REVIEW-CHECKLIST.md) | Manual emergency-access, exclusion, authentication, and risk review |
+| [`PHASE-2-VALIDATION.md`](PHASE-2-VALIDATION.md) | Artifact checks plus pending lab and portal evidence |
+| [`Get-TenantDiscoveryPhase2.ps1`](scripts/Get-TenantDiscoveryPhase2.ps1) | Read-only Conditional Access, registration, and risk collector |
+| [`Test-TenantDiscoveryPhase2Report.ps1`](scripts/Test-TenantDiscoveryPhase2Report.ps1) | Offline structure, arithmetic, availability, and sanitization validator |
+| [`access-policy-posture.schema.json`](schema/access-policy-posture.schema.json) | Published Phase 2 report contract |
+| [`access-policy-posture.synthetic.json`](samples/access-policy-posture.synthetic.json) | Fictional example conforming to schema version 0.1.0 |
+
+Delegated scopes:
+
+- `Policy.Read.All`
+- `AuditLog.Read.All`
+- `IdentityRiskyUser.Read.All`
+- `IdentityRiskEvent.Read.All`
+
+Risk reads are explicitly availability-aware. A successful zero-record result is recorded as zero, while a license-, role-, or permission-dependent failure is recorded as unavailable with a sanitized limitation.
 
 ## Planned implementation phases
 
 ### Phase 1: Entra aggregate baseline
 
-**Implementation status:** Script, validator, runbook, schema, and synthetic example are available. Lab execution and offline validation passed; administrator-portal comparison is pending.
+**Implementation status:** Complete. Collector, validator, runbook, schema, synthetic example, lab execution, offline validation, and administrator-portal comparison passed.
 
 - organization and verified-domain summary
 - user and guest counts
@@ -64,10 +88,13 @@ The scripts are lab-executed evidence from Jason's own tenant. All five report s
 
 ### Phase 2: Access and policy posture
 
-- Conditional Access policy-state counts
-- authentication-method and risk-report availability
+**Implementation status:** Collector, validator, runbook, schema, synthetic example, and manual checklist are ready. Lab execution and portal comparison are pending.
+
+- Conditional Access policy-state and control counts
+- authentication registration and capability counts
+- risky-user and risk-detection availability
 - emergency-access and exclusion review checklist
-- explicit reporting of license- or permission-dependent gaps
+- explicit reporting of license-, role-, permission-, or report-dependent gaps
 
 ### Phase 3: Microsoft 365 workload preflight
 
@@ -84,20 +111,20 @@ The scripts are lab-executed evidence from Jason's own tenant. All five report s
 
 ## Report design
 
-The Phase 1 aggregate report conforms to [`tenant-baseline.schema.json`](schema/tenant-baseline.schema.json). A deliberately fictional example is provided at [`tenant-baseline.synthetic.json`](samples/tenant-baseline.synthetic.json).
+Phase 1 conforms to [`tenant-baseline.schema.json`](schema/tenant-baseline.schema.json). Phase 2 conforms to [`access-policy-posture.schema.json`](schema/access-policy-posture.schema.json). Deliberately fictional examples are committed under [`samples/`](samples/).
 
-Schema version 0.2.0 uses `null` plus a collection status when a section cannot be read. It does not use zero to mean "not collected."
+Both report contracts use `null` plus collection status when data cannot be read. They do not use zero to mean "not collected."
 
 ## Validation plan
 
 - validate module and command prerequisites
 - record the connected tenant and granted scopes locally, never in committed output
 - compare aggregate counts with the Entra and Microsoft 365 admin centers
-- test behavior when optional permissions or licensed features are unavailable
-- verify that default output contains no UPNs, object IDs, tenant IDs, or domain names
+- test behavior when optional permissions, roles, reports, or licensed features are unavailable
+- verify that default output contains no UPNs, object IDs, tenant IDs, domains, policy names, or risk details
 - disconnect Graph and service sessions after execution
-- document actual results, mismatches, and limitations
+- document actual results, mismatches, corrections, and limitations
 
 ## Walkthrough outcome
 
-At completion, the operator should be able to explain what each discovery check reveals, which Microsoft control plane supplies the data, what permission is required, and why the result matters before a migration or operational handoff.
+At completion, the operator should be able to explain what each discovery check reveals, which Microsoft control plane supplies the data, what permission and role are required, where licensing changes availability, and why the result matters before a migration or operational handoff.

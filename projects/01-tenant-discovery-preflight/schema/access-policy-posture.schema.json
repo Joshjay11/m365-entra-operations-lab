@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Joshjay11/m365-entra-operations-lab/projects/01-tenant-discovery-preflight/schema/access-policy-posture.schema.json",
+  "title": "Project 01 Phase 2 Access and Policy Posture Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "metadata",
+    "conditionalAccess",
+    "authenticationRegistration",
+    "identityRisk",
+    "limitations"
+  ],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "generatedAtUtc",
+        "evidenceType",
+        "phase",
+        "graphApiProfile"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "0.1.0" },
+        "generatedAtUtc": { "type": "string", "format": "date-time" },
+        "evidenceType": {
+          "type": "string",
+          "enum": ["synthetic", "sanitized-lab"]
+        },
+        "phase": { "const": "phase-2" },
+        "graphApiProfile": { "const": "v1.0" }
+      }
+    },
+    "conditionalAccess": { "$ref": "#/$defs/conditionalAccessSummary" },
+    "authenticationRegistration": { "$ref": "#/$defs/authenticationRegistrationSummary" },
+    "identityRisk": { "$ref": "#/$defs/identityRiskSummary" },
+    "limitations": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "nullableNonNegativeInteger": {
+      "type": ["integer", "null"],
+      "minimum": 0
+    },
+    "binaryCollectionStatus": {
+      "type": "string",
+      "enum": ["complete", "unavailable"]
+    },
+    "collectionStatus": {
+      "type": "string",
+      "enum": ["complete", "partial", "unavailable"]
+    },
+    "conditionalAccessSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "totalPolicies",
+        "enabledPolicies",
+        "reportOnlyPolicies",
+        "disabledPolicies",
+        "allUsersPolicies",
+        "policiesWithUserExclusions",
+        "policiesWithGroupExclusions",
+        "policiesWithRoleExclusions",
+        "mfaGrantPolicies",
+        "authenticationStrengthPolicies",
+        "blockGrantPolicies",
+        "compliantDeviceGrantPolicies",
+        "hybridJoinedDeviceGrantPolicies"
+      ],
+      "properties": {
+        "status": { "$ref": "#/$defs/binaryCollectionStatus" },
+        "totalPolicies": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "enabledPolicies": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "reportOnlyPolicies": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "disabledPolicies": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "allUsersPolicies": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "policiesWithUserExclusions": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "policiesWithGroupExclusions": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "policiesWithRoleExclusions": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "mfaGrantPolicies": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "authenticationStrengthPolicies": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "blockGrantPolicies": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "compliantDeviceGrantPolicies": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "hybridJoinedDeviceGrantPolicies": { "$ref": "#/$defs/nullableNonNegativeInteger" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "complete" } } },
+          "then": {
+            "properties": {
+              "totalPolicies": { "type": "integer", "minimum": 0 },
+              "enabledPolicies": { "type": "integer", "minimum": 0 },
+              "reportOnlyPolicies": { "type": "integer", "minimum": 0 },
+              "disabledPolicies": { "type": "integer", "minimum": 0 },
+              "allUsersPolicies": { "type": "integer", "minimum": 0 },
+              "policiesWithUserExclusions": { "type": "integer", "minimum": 0 },
+              "policiesWithGroupExclusions": { "type": "integer", "minimum": 0 },
+              "policiesWithRoleExclusions": { "type": "integer", "minimum": 0 },
+              "mfaGrantPolicies": { "type": "integer", "minimum": 0 },
+              "authenticationStrengthPolicies": { "type": "integer", "minimum": 0 },
+              "blockGrantPolicies": { "type": "integer", "minimum": 0 },
+              "compliantDeviceGrantPolicies": { "type": "integer", "minimum": 0 },
+              "hybridJoinedDeviceGrantPolicies": { "type": "integer", "minimum": 0 }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "status": { "const": "unavailable" } } },
+          "then": {
+            "properties": {
+              "totalPolicies": { "type": "null" },
+              "enabledPolicies": { "type": "null" },
+              "reportOnlyPolicies": { "type": "null" },
+              "disabledPolicies": { "type": "null" },
+              "allUsersPolicies": { "type": "null" },
+              "policiesWithUserExclusions": { "type": "null" },
+              "policiesWithGroupExclusions": { "type": "null" },
+              "policiesWithRoleExclusions": { "type": "null" },
+              "mfaGrantPolicies": { "type": "null" },
+              "authenticationStrengthPolicies": { "type": "null" },
+              "blockGrantPolicies": { "type": "null" },
+              "compliantDeviceGrantPolicies": { "type": "null" },
+              "hybridJoinedDeviceGrantPolicies": { "type": "null" }
+            }
+          }
+        }
+      ]
+    },
+    "authenticationRegistrationSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "usersReported",
+        "adminUsers",
+        "mfaRegisteredUsers",
+        "mfaCapableUsers",
+        "ssprRegisteredUsers",
+        "ssprEnabledUsers",
+        "ssprCapableUsers",
+        "passwordlessCapableUsers",
+        "systemPreferredEnabledUsers"
+      ],
+      "properties": {
+        "status": { "$ref": "#/$defs/binaryCollectionStatus" },
+        "usersReported": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "adminUsers": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "mfaRegisteredUsers": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "mfaCapableUsers": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "ssprRegisteredUsers": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "ssprEnabledUsers": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "ssprCapableUsers": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "passwordlessCapableUsers": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "systemPreferredEnabledUsers": { "$ref": "#/$defs/nullableNonNegativeInteger" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "complete" } } },
+          "then": {
+            "properties": {
+              "usersReported": { "type": "integer", "minimum": 0 },
+              "adminUsers": { "type": "integer", "minimum": 0 },
+              "mfaRegisteredUsers": { "type": "integer", "minimum": 0 },
+              "mfaCapableUsers": { "type": "integer", "minimum": 0 },
+              "ssprRegisteredUsers": { "type": "integer", "minimum": 0 },
+              "ssprEnabledUsers": { "type": "integer", "minimum": 0 },
+              "ssprCapableUsers": { "type": "integer", "minimum": 0 },
+              "passwordlessCapableUsers": { "type": "integer", "minimum": 0 },
+              "systemPreferredEnabledUsers": { "type": "integer", "minimum": 0 }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "status": { "const": "unavailable" } } },
+          "then": {
+            "properties": {
+              "usersReported": { "type": "null" },
+              "adminUsers": { "type": "null" },
+              "mfaRegisteredUsers": { "type": "null" },
+              "mfaCapableUsers": { "type": "null" },
+              "ssprRegisteredUsers": { "type": "null" },
+              "ssprEnabledUsers": { "type": "null" },
+              "ssprCapableUsers": { "type": "null" },
+              "passwordlessCapableUsers": { "type": "null" },
+              "systemPreferredEnabledUsers": { "type": "null" }
+            }
+          }
+        }
+      ]
+    },
+    "identityRiskSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "riskyUsersAvailable",
+        "riskyUsers",
+        "riskDetectionsAvailable",
+        "riskDetections"
+      ],
+      "properties": {
+        "status": { "$ref": "#/$defs/collectionStatus" },
+        "riskyUsersAvailable": { "type": "boolean" },
+        "riskyUsers": { "$ref": "#/$defs/nullableNonNegativeInteger" },
+        "riskDetectionsAvailable": { "type": "boolean" },
+        "riskDetections": { "$ref": "#/$defs/nullableNonNegativeInteger" }
+      }
+    }
+  }
+}

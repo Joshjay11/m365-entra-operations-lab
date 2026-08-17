@@ -1,0 +1,49 @@
+{
+  "metadata": {
+    "schemaVersion": "0.1.0",
+    "generatedAtUtc": "2026-08-17T16:00:00Z",
+    "evidenceType": "synthetic",
+    "phase": "phase-2",
+    "graphApiProfile": "v1.0"
+  },
+  "conditionalAccess": {
+    "status": "complete",
+    "totalPolicies": 9,
+    "enabledPolicies": 4,
+    "reportOnlyPolicies": 2,
+    "disabledPolicies": 3,
+    "allUsersPolicies": 6,
+    "policiesWithUserExclusions": 3,
+    "policiesWithGroupExclusions": 2,
+    "policiesWithRoleExclusions": 1,
+    "mfaGrantPolicies": 5,
+    "authenticationStrengthPolicies": 2,
+    "blockGrantPolicies": 2,
+    "compliantDeviceGrantPolicies": 2,
+    "hybridJoinedDeviceGrantPolicies": 1
+  },
+  "authenticationRegistration": {
+    "status": "complete",
+    "usersReported": 100,
+    "adminUsers": 6,
+    "mfaRegisteredUsers": 88,
+    "mfaCapableUsers": 82,
+    "ssprRegisteredUsers": 76,
+    "ssprEnabledUsers": 92,
+    "ssprCapableUsers": 71,
+    "passwordlessCapableUsers": 24,
+    "systemPreferredEnabledUsers": 90
+  },
+  "identityRisk": {
+    "status": "complete",
+    "riskyUsersAvailable": true,
+    "riskyUsers": 2,
+    "riskDetectionsAvailable": true,
+    "riskDetections": 7
+  },
+  "limitations": [
+    "All values are fictional and exist only to demonstrate the Phase 2 report structure.",
+    "The authentication registration report does not return disabled users, so usersReported is not a tenant-wide user total.",
+    "Emergency-access design and policy exclusion correctness require manual review and are not certified by aggregate counts."
+  ]
+}
